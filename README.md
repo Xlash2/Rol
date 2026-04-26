@@ -1,5 +1,5 @@
 # Rol
-An arcade-style web game for mobile using gyro controls. Installable as a PWA. Play [here](https://www.google.com).
+An arcade-style web game for mobile using gyro controls. Installable as a PWA. Play [here](https://xlh-rol.web.app/).
 
 <img width="360" height="640" alt="Screenshot_20260426_123959_Chrome" src="https://github.com/user-attachments/assets/8b1af0a8-b6a6-43e1-a548-20ba61d3457d" />
 
