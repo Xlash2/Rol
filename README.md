@@ -18,7 +18,7 @@ Then access on your favorite mobile device.
 
 ## Assets Attributions
 
-- Music: [Tallbeard Studios](https://tallbeard.itch.io/)
+- Music: [Abstraction](https://abstractionmusic.com/)
 - Sound Effects: [Leohpaz](https://leohpaz.itch.io/)
 - Font: [MedievalSharp](https://fonts.google.com/specimen/MedievalSharp?preview.script=Latn)
 
