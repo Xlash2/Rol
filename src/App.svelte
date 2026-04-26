@@ -85,6 +85,12 @@
       const permission = await DeviceOrientationEvent.requestPermission();
       if (permission === "granted") {
         game.init();
+        if (!localStorage.getItem("iosNoti")) {
+          window.alert(
+            "Please play in portrait mode with auto rotation locked.",
+          );
+          localStorage.setItem("iosNoti", "1");
+        }
       } else {
         window.alert("Why would you not allow it bro?");
       }
