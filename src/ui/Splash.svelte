@@ -43,7 +43,7 @@
       <div class="control">
         <button
           onclick={() => {
-            window.open("https://www.google.com/");
+            window.open("https://github.com/Xlash2/Rol");
           }}
           class="button is-fullwidth">GITHUB</button
         >
