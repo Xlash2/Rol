@@ -59,7 +59,7 @@
   }
 
   async function checkDeviceOrientation() {
-    if (isCheckingOrientation) {
+    if (isCheckingOrientation && !isSafari) {
       window.alert("You guys have phones right?");
       return;
     }
