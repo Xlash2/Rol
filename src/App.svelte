@@ -5,6 +5,7 @@
   import Menu from "./ui/Menu.svelte";
   import Splash from "./ui/Splash.svelte";
   import Update from "./ui/Update.svelte";
+  import { onMount } from "svelte";
 
   let game: Game = new Game();
   let isFullscreen = $state(false);
@@ -32,6 +33,20 @@
       isFullscreen = false;
       document.exitFullscreen().catch((err) => console.warn(err.message));
     }
+  });
+
+  document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState === "visible") {
+      navigator.wakeLock
+        .request("screen")
+        .catch((err) => console.warn(err.message));
+    }
+  });
+
+  onMount(() => {
+    navigator.wakeLock
+      .request("screen")
+      .catch((err) => console.warn(err.message));
   });
 
   async function prepareScreen() {

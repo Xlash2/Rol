@@ -139,10 +139,6 @@ export class Game {
   public start() {
     Howler.ctx?.resume();
 
-    navigator.wakeLock
-      .request("screen")
-      .catch((err) => console.warn(err.message));
-
     this.score = 0;
     this.currentEnemyCount = 0;
     this.enemyManager.clear();
