@@ -1,0 +1,15 @@
+$coin: #00fdff;
+$player: #c206e7;
+$enemy: #ff0000;
+
+@use "bulma/sass" with (
+  $family-primary: '"MedievalSharp", sans-serif',
+  $success: $coin,
+  $link: $player,
+  $danger: $enemy
+);
+
+@font-face {
+  font-family: "MedievalSharp";
+  src: url("./fonts/MedievalSharp-Regular.ttf");
+}
