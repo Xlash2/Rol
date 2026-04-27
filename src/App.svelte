@@ -9,16 +9,26 @@
 
   let game: Game = new Game();
   let isFullscreen = $state(false);
-  let isSafari = $state(false);
+  let isNoFullscreen = $state(false);
+  let isNoAutolock = $state(false);
 
   let isCheckingOrientation = $state(false);
 
   let displaySplash = $derived(
-    (isSafari && game.state === GameState.ASLEEP) ||
-      (!isSafari && !isFullscreen),
+    (isNoFullscreen && game.state === GameState.ASLEEP) ||
+      (!isNoFullscreen && !isFullscreen),
   );
 
   const { needRefresh, updateServiceWorker } = useRegisterSW();
+
+  $effect(() => {
+    if (isNoAutolock) {
+      if (!localStorage.getItem("lockNotice")) {
+        window.alert("Please play in portrait mode with auto rotation locked.");
+        localStorage.setItem("lockNotice", "1");
+      }
+    }
+  });
 
   document.addEventListener("fullscreenchange", async () => {
     if (document.fullscreenElement) {
@@ -52,15 +62,22 @@
   async function prepareScreen() {
     try {
       await document.documentElement.requestFullscreen();
+    } catch (err) {
+      isNoFullscreen = true;
+      console.warn(err.message);
+    }
+
+    try {
       await screen.orientation.lock("portrait");
     } catch (err) {
+      isNoAutolock = true;
       console.warn(err.message);
     }
   }
 
   async function checkDeviceOrientation() {
-    if (isCheckingOrientation && !isSafari) {
-      window.alert("You guys have phones right?");
+    if (isCheckingOrientation) {
+      window.alert("Don't click too much bro.");
       return;
     }
 
@@ -81,16 +98,11 @@
     };
 
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
-      isSafari = true;
       const permission = await DeviceOrientationEvent.requestPermission();
       if (permission === "granted") {
+        isNoFullscreen = true;
+        isNoAutolock = true;
         game.init();
-        if (!localStorage.getItem("iosNoti")) {
-          window.alert(
-            "Please play in portrait mode with auto rotation locked.",
-          );
-          localStorage.setItem("iosNoti", "1");
-        }
       } else {
         window.alert("Why would you not allow it bro?");
       }
