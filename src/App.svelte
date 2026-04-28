@@ -110,7 +110,7 @@
   // const vConsole = new VConsole();
 </script>
 
-<canvas class="is-unselectable" id="renderCanvas"></canvas>
+<canvas id="renderCanvas"></canvas>
 
 {#if game.state === GameState.MENU}<Menu {game} />
 {:else if game.state === GameState.PLAYING}
