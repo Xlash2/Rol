@@ -1,34 +1,26 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { useRegisterSW } from "virtual:pwa-register/svelte";
   import { Game, GameState } from "./core/Game.svelte";
   import Gameplay from "./ui/Gameplay.svelte";
   import Menu from "./ui/Menu.svelte";
   import Splash from "./ui/Splash.svelte";
   import Update from "./ui/Update.svelte";
-  import { onMount } from "svelte";
 
   let game: Game = new Game();
   let isFullscreen = $state(false);
-  let isNoFullscreen = $state(false);
-  let isNoAutolock = $state(false);
+  let isFullscreenNotSupported = $state(false);
 
   let isCheckingOrientation = $state(false);
 
   let displaySplash = $derived(
-    (isNoFullscreen && game.state === GameState.ASLEEP) ||
-      (!isNoFullscreen && !isFullscreen),
+    (isFullscreenNotSupported && game.state === GameState.ASLEEP) ||
+      (!isFullscreenNotSupported && !isFullscreen),
   );
 
-  const { needRefresh, updateServiceWorker } = useRegisterSW();
+  let currentOrientation = $state(screen.orientation.type);
 
-  $effect(() => {
-    if (isNoAutolock) {
-      if (!localStorage.getItem("lockNotice")) {
-        window.alert("Please play in portrait mode with auto rotation locked.");
-        localStorage.setItem("lockNotice", "1");
-      }
-    }
-  });
+  const { needRefresh, updateServiceWorker } = useRegisterSW();
 
   document.addEventListener("fullscreenchange", async () => {
     if (document.fullscreenElement) {
@@ -59,18 +51,21 @@
       .catch((err) => console.warn(err.message));
   });
 
+  screen.orientation.addEventListener("change", function (ev) {
+    currentOrientation = this.type;
+  });
+
   async function prepareScreen() {
     try {
       await document.documentElement.requestFullscreen();
     } catch (err) {
-      isNoFullscreen = true;
+      isFullscreenNotSupported = true;
       console.warn(err.message);
     }
 
     try {
       await screen.orientation.lock("portrait");
     } catch (err) {
-      isNoAutolock = true;
       console.warn(err.message);
     }
   }
@@ -100,8 +95,7 @@
     if (typeof DeviceOrientationEvent.requestPermission === "function") {
       const permission = await DeviceOrientationEvent.requestPermission();
       if (permission === "granted") {
-        isNoFullscreen = true;
-        isNoAutolock = true;
+        isFullscreenNotSupported = true;
         game.init();
       } else {
         window.alert("Why would you not allow it bro?");
@@ -134,3 +128,8 @@
 {#if $needRefresh}
   <Update {updateServiceWorker} />
 {/if}
+
+{#if currentOrientation.startsWith("landscape")}
+  <div class="warning mb-1 has-text-centered">
+    PLEASE PLAY IN PORTRAIT MODE.
+  </div>{/if}
