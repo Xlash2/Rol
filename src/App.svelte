@@ -130,6 +130,6 @@
 {/if}
 
 {#if currentOrientation.startsWith("landscape")}
-  <div class="warning mb-1 has-text-centered">
+  <div class="warning mt-5 has-text-centered">
     PLEASE PLAY IN PORTRAIT MODE.
   </div>{/if}
