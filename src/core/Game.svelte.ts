@@ -46,15 +46,15 @@ export class Game {
 
     const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 
+    DefaultLoadingScreen.DefaultLogoUrl = "./images/loading.png";
+    DefaultLoadingScreen.DefaultSpinnerUrl = "./images/spinner.svg";
+
     const engine = new Engine(canvas, true, undefined, true);
+    engine.displayLoadingUI();
 
     const scene = new Scene(engine);
     scene.performancePriority = ScenePerformancePriority.Intermediate;
     scene.clearColor = Color4.FromHexString("#00000000");
-
-    DefaultLoadingScreen.DefaultLogoUrl = "./images/loading.png";
-    DefaultLoadingScreen.DefaultSpinnerUrl = "./images/spinner.svg";
-    new DefaultLoadingScreen(canvas, "LOADING", "#000000");
 
     DracoDecoder.DefaultConfiguration.wasmUrl = dracoWasm;
     DracoDecoder.DefaultConfiguration.wasmBinaryUrl = dracoWasmBinary;
@@ -105,7 +105,6 @@ export class Game {
 
     await contentManager.loadBgm();
     await contentManager.loadSfx();
-    engine.hideLoadingUI();
 
     // Level
 
@@ -134,6 +133,7 @@ export class Game {
     // State
 
     this.state = GameState.MENU;
+    engine.hideLoadingUI();
   }
 
   public start() {
