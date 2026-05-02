@@ -1,5 +1,5 @@
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { TransformNode } from "@babylonjs/core/Meshes/transformNode";
+import type { TransformNode } from "@babylonjs/core/Meshes/transformNode";
 import { PhysicsBody } from "@babylonjs/core/Physics/v2/physicsBody";
 import { PhysicsShapeSphere } from "@babylonjs/core/Physics/v2/physicsShape";
 import type { ContentManager } from "./ContentManager";
@@ -13,8 +13,6 @@ export class PlayerManager {
 
   private spawnPosition: Vector3 = new Vector3(0, 5, 0);
   private shape: PhysicsShapeSphere;
-
-  private activePlayer!: TransformNode;
 
   constructor(
     sceneManager: SceneManager,
@@ -46,7 +44,7 @@ export class PlayerManager {
     const observer = this.sceneManager.scene.onBeforeRenderObservable.add(
       () => {
         if (player.position.y < -5) {
-          this.die();
+          this.kill(player);
         }
       },
     );
@@ -61,14 +59,10 @@ export class PlayerManager {
       1 / 0.4,
     );
 
-    this.activePlayer = player;
-
     this.contentManager.sfx["player_spawn.ogg"].play();
   }
 
-  public die() {
-    const player = this.activePlayer;
-
+  public kill(player: TransformNode) {
     if (player.metadata.isDying) return;
     player.metadata.isDying = true;
 

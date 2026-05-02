@@ -66,9 +66,7 @@ export class CoinManager {
     );
   }
 
-  public get() {
-    const coin = this.activeCoin;
-
+  public get(coin: TransformNode) {
     if (coin.metadata.isGot === true) return;
     coin.metadata.isGot = true;
 

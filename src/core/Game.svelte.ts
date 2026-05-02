@@ -91,9 +91,10 @@ export class Game {
           event.collidedAgainst.transformNode;
 
         if ("player" in dict && "coin" in dict) {
-          if (!dict["player"].metadata.isDying) this.coinManager.get();
+          if (!dict["player"].metadata.isDying)
+            this.coinManager.get(dict["coin"]);
         } else if ("player" in dict && "enemy" in dict) {
-          this.playerManager.die();
+          this.playerManager.kill(dict["player"]);
         }
       }
     });
