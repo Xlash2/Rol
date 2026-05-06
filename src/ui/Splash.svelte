@@ -55,6 +55,6 @@
 <style>
   .splash {
     background-color: rgba(0, 0, 0, 1);
-    z-index: 9999;
+    z-index: 9998;
   }
 </style>
