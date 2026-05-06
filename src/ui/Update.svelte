@@ -5,7 +5,7 @@
     $props();
 </script>
 
-<div class="top-right">
+<div class="update top-right">
   <button
     onclick={() => {
       updateServiceWorker(true);
@@ -13,3 +13,9 @@
     class="button">UPDATE</button
   >
 </div>
+
+<style>
+  .update {
+    z-index: 2;
+  }
+</style>
