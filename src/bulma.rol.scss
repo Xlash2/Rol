@@ -1,13 +1,20 @@
-$coin: #00fdff;
-$player: #c206e7;
-$enemy: #ff0000;
-
-@use "bulma/sass" with (
+@use "bulma/sass/utilities/derived-variables" with (
   $family-primary: '"MedievalSharp", sans-serif',
-  $success: $coin,
-  $link: $player,
-  $danger: $enemy
+  $success: #00fdff,
+  $link: #c206e7,
+  $danger: #ff0000
 );
+
+@use "bulma/sass/base";
+@use "bulma/sass/themes";
+@use "bulma/sass/elements/button";
+@use "bulma/sass/elements/icon";
+@use "bulma/sass/form/tools";
+@use "bulma/sass/helpers/flexbox";
+@use "bulma/sass/helpers/spacing";
+@use "bulma/sass/helpers/typography";
+@use "bulma/sass/helpers/visibility";
+
 
 @font-face {
   font-family: "MedievalSharp";
