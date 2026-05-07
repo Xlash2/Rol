@@ -102,10 +102,6 @@ export class ContentManager {
     });
     instance.animations.push(this.scaleAnim);
 
-    instance.onDispose = () => {
-      root.dispose();
-    };
-
     return instance;
   }
 }

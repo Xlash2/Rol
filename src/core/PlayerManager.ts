@@ -14,6 +14,8 @@ export class PlayerManager {
   private spawnPosition: Vector3 = new Vector3(0, 5, 0);
   private shape: PhysicsShapeSphere;
 
+  private player: TransformNode;
+
   constructor(
     sceneManager: SceneManager,
     gameAssetsManager: ContentManager,
@@ -28,28 +30,31 @@ export class PlayerManager {
       this.contentManager.entityScale / 2,
       this.sceneManager.scene,
     );
+
+    this.player = this.contentManager.instantiateEntity("player");
+
+    this.player.setEnabled(false);
+    this.player.position.copyFrom(this.spawnPosition);
+
+    this.sceneManager.scene.onBeforeRenderObservable.add(() => {
+      if (this.player.position.y < -5) {
+        this.kill(this.player);
+      }
+    });
+
+    this.player.metadata = { isDying: false };
   }
 
   public spawn() {
-    const player = this.contentManager.instantiateEntity("player");
+    const player = this.player;
 
-    player.position.copyFrom(this.spawnPosition);
     player.scaling.scaleInPlace(0);
+    player.setEnabled(true);
 
     const body = new PhysicsBody(player, 2, false, this.sceneManager.scene);
     body.shape = this.shape;
     body.setMassProperties({ mass: 1e-3 });
     body.setAngularDamping(0);
-
-    const observer = this.sceneManager.scene.onBeforeRenderObservable.add(
-      () => {
-        if (player.position.y < -5) {
-          this.kill(player);
-        }
-      },
-    );
-
-    player.metadata = { isDying: false, observer: observer };
 
     this.sceneManager.scene.beginAnimation(
       player,
@@ -75,10 +80,11 @@ export class PlayerManager {
       () => {
         this.game.end();
 
-        this.sceneManager.scene.onBeforeRenderObservable.remove(
-          player.metadata.observer,
-        );
-        player.dispose();
+        player.setEnabled(false);
+        player.physicsBody?.dispose();
+        player.metadata.isDying = false;
+
+        player.position.copyFrom(this.spawnPosition);
       },
     );
 
