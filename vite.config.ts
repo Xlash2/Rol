@@ -4,6 +4,8 @@ import mkcert from "vite-plugin-mkcert";
 
 import { VitePWA } from "vite-plugin-pwa";
 import { visualizer } from "rollup-plugin-visualizer";
+import path from "node:path";
+import fs from "node:fs";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -58,5 +60,14 @@ export default defineConfig({
       open: true,
       filename: "stats.html",
     }),
+    {
+      name: "post-build-delete",
+      closeBundle() {
+        const fileToDelete = path.resolve(__dirname, "dist/icon.png");
+        if (fs.existsSync(fileToDelete)) {
+          fs.rmSync(fileToDelete);
+        }
+      },
+    },
   ],
 });
