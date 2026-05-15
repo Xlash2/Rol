@@ -11,7 +11,7 @@ import dracoFallback from "@babylonjs/core/assets/Draco/draco_decoder_gltf?url";
 import dracoWasm from "@babylonjs/core/assets/Draco/draco_wasm_wrapper_gltf?url";
 
 import { Engine } from "@babylonjs/core/Engines/engine";
-import "@babylonjs/core/Loading/loadingScreen";
+import { DefaultLoadingScreen } from "@babylonjs/core/Loading/loadingScreen";
 import { Color4 } from "@babylonjs/core/Maths/math.color";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { DracoDecoder } from "@babylonjs/core/Meshes/Compression/dracoDecoder";
@@ -47,6 +47,10 @@ export class Game {
     const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 
     const engine = new Engine(canvas, true, undefined, true);
+
+    DefaultLoadingScreen.DefaultLogoUrl = "./images/loading.svg";
+    DefaultLoadingScreen.DefaultSpinnerUrl = "./images/spinner.svg";
+
     engine.displayLoadingUI();
 
     const scene = new Scene(engine);
