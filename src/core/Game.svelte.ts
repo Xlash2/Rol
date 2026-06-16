@@ -78,8 +78,8 @@ export class Game {
     });
 
     const handleVisibilityChange = async () => {
-      if (this.wakeLock !== null && document.visibilityState === "visible") {
-        await this.requestWakeLock();
+      if (document.visibilityState === "visible") {
+        this.requestWakeLock();
       }
     };
 
@@ -149,16 +149,12 @@ export class Game {
   }
 
   private async requestWakeLock() {
-    if (this.wakeLock !== null) {
-      console.log("Wake lock is already active.");
+    if (this.wakeLock && !this.wakeLock.released) {
       return;
     }
 
     try {
       this.wakeLock = await navigator.wakeLock.request("screen");
-      this.wakeLock.addEventListener("release", () => {
-        this.wakeLock = null;
-      });
     } catch (err) {
       console.error("Failed to acquire lock:", err);
     }
