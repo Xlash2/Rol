@@ -37,6 +37,8 @@ export class Game {
   );
   public fps: string = $state("");
 
+  public wakeLock: WakeLockSentinel | null = null;
+
   public async init(): Promise<void> {
     if (this.state !== GameState.ASLEEP) return;
 
@@ -74,6 +76,14 @@ export class Game {
         Howler.ctx.suspend();
       else if (Howler.ctx.state === "suspended") Howler.ctx.resume();
     });
+
+    const handleVisibilityChange = async () => {
+      if (this.wakeLock !== null && document.visibilityState === "visible") {
+        await this.requestWakeLock();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Physics
 
@@ -138,8 +148,26 @@ export class Game {
     engine.hideLoadingUI();
   }
 
+  private async requestWakeLock() {
+    if (this.wakeLock !== null) {
+      console.log("Wake lock is already active.");
+      return;
+    }
+
+    try {
+      this.wakeLock = await navigator.wakeLock.request("screen");
+      this.wakeLock.addEventListener("release", () => {
+        this.wakeLock = null;
+      });
+    } catch (err) {
+      console.error("Failed to acquire lock:", err);
+    }
+  }
+
   public start() {
     Howler.ctx?.resume();
+
+    this.requestWakeLock();
 
     this.score = 0;
     this.currentEnemyCount = 0;

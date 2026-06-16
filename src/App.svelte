@@ -37,20 +37,6 @@
     }
   });
 
-  document.addEventListener("visibilitychange", async () => {
-    if (document.visibilityState === "visible") {
-      navigator.wakeLock
-        .request("screen")
-        .catch((err) => console.warn(err.message));
-    }
-  });
-
-  onMount(() => {
-    navigator.wakeLock
-      .request("screen")
-      .catch((err) => console.warn(err.message));
-  });
-
   screen.orientation.addEventListener("change", function (ev) {
     currentOrientation = this.type;
   });
